@@ -1,0 +1,65 @@
+{% extends 'home/base.html' %}
+
+{% block title %}{% endblock title %}
+{% block supportactive %}active{% endblock supportactive %}
+
+{% block style %}
+<style>
+  body{
+    background-color: #c4edfb;
+  }
+  .container h1{
+    text-decoration: underline;
+    width: max-content;
+    margin: auto;
+  }
+</style>
+{% endblock style %}
+
+{% block body %}
+
+<body>
+  <div class="container my-3">
+    <h1>Contact us!</h1>
+    <form class="row g-3" method="POST" action="/support/">
+      {% csrf_token %}
+      <div class="col-md-12">
+        <label for="inputName" class="form-label">Name</label>
+        <input type="text" class="form-control" id="inputName" name="name">
+      </div>
+      <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Email</label>
+        <input type="email" class="form-control" id="inputEmail4" name="email">
+      </div>
+      <div class="col-md-6">
+        <label for="inputPhone" class="form-label">Contact no.</label>
+        <input type="tel" class="form-control" id="inputPhone" name="phone">
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Address</label>
+        <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St">
+      </div>
+      <div class="col-md-4">
+        <label for="inputState" class="form-label">State</label>
+        <input type="text" class="form-control" id="inputState" name="state">
+      </div>
+      <div class="col-md-4">
+        <label for="inputCity" class="form-label">City</label>
+        <input type="text" class="form-control" id="inputCity" name="city">
+      </div>
+      <div class="col-md-4">
+        <label for="inputPin" class="form-label">Pin</label>
+        <input type="text" class="form-control" id="inputPin" name="pin">
+      </div>
+      <div class="form-group">
+        <label for="desc">Give us your message here</label>
+        <textarea class="form-control" id="desc" rows="3" name="desc"></textarea>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </div>
+    </form>
+  </div>
+</body>{% endblock body %}
+
+{% block script %}{% endblock script %}
