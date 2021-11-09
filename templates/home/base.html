@@ -16,6 +16,12 @@
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
     }
+
+    #message {
+      margin-bottom: -0.5rem;
+      padding: 0.5rem;
+      z-index: 2;
+    }
   </style>
   {% block style %}{% endblock style %}
 </head>
@@ -23,7 +29,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Cryptonic</a>
+      <a class="navbar-brand" href="/">Cryptonic</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -37,24 +43,112 @@
             <a class="nav-link {% block aboutactive %}{% endblock aboutactive %}" href="/about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% block supportactive %}{% endblock supportactive %}" href="/support">Support</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link {% block blogactive %}{% endblock blogactive %}" href="/blog">Blog</a>
           </li>
-
+          <li class="nav-item">
+            <a class="nav-link {% block supportactive %}{% endblock supportactive %}" href="/contact">Contact us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin" target="_blank">Admin</a>
+          </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" action='/search/' method='GET'>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id='query'
+            name='query'>
           <button class="btn btn-outline-success" type="submit">Search</button>
-          <button class="btn btn-outline-success"><a href="/admin/" target="_blank">Admin</a></button>
         </form>
+
+        <!-- Sign Up button -->
+        <button type="button" class="btn btn-success mx-1" data-bs-toggle="modal" data-bs-target="#signupModal">
+          Sign Up
+        </button>
+        <!-- Login button -->
+        <button type="button" class="btn btn-success mx-1" data-bs-toggle="modal" data-bs-target="#loginModal">
+          Login
+        </button>
+
+        <!-- Signup Form -->
+        <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="signupModalLabel">Let's create an Account!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+                <form action="/signup/" method="post">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="fname" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="fname" name="fname" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="lname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lname" name="lname" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Choose Username</label>
+                    <input type="username" class="form-control" id="username" name="username" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="pass1" class="form-label">Choose a Password</label>
+                    <input type="password" class="form-control" id="pass1" name="pass1" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="pass2" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="pass2" name="pass2" required>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+                <form action="/login/" method="post">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="loginusername" class="form-label">Enter Username</label>
+                    <input type="loginusername" class="form-control" id="loginusername" name="loginusername" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="loginpass" class="form-label">Enter Password</label>
+                    <input type="password" class="form-control" id="loginpass" name="loginpass" required>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </nav>
 
   {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+  <div id='message' class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
     <strong>Message : </strong> {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
