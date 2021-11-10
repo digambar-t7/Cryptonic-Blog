@@ -11,7 +11,7 @@
         padding: 0;
     }
 
-    #container {
+    #section {
         display: flex;
         justify-content: space-around;
         /* align-items: center; */
@@ -56,10 +56,32 @@
         border: 2px solid white;
         border-radius: 3rem;
     }
-    #liker{
+
+    #liker {
         display: flex;
         justify-content: flex-end;
         align-items: center;
+    }
+
+    .comment {
+        background-color: #f6f6f6;
+        display: flex;
+        justify-content: center;
+        border-radius: 4px;
+        margin: 15px 0;
+    }
+
+    .comment img {
+        border-radius: 34px;
+        width: 117px;
+    }
+
+    .commentdetails {
+        padding-top: 10px;
+        height: 86px;
+    }
+    .actualcomment{
+        padding-bottom:19px ;
     }
 </style>
 {% endblock style %}
@@ -67,10 +89,13 @@
 {% block body %}
 
 <body>
-    <div id="container">
+    <div id="section">
         <div class="content">
             <h1>{{post.title}}</h1>
-            {% comment %} <div id="liker" class="fb-like" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div> {% endcomment %}
+            {% comment %} <div id="liker" class="fb-like"
+                data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-width=""
+                data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
+            {% endcomment %}
             <h4># {{post.head1}}</h4>
             <div id="image">
                 <p>{{post.desc1}}</p>
@@ -81,17 +106,38 @@
             <h4># {{post.head3}}</h4>
             <p>{{post.desc3}}</p>
             {% comment %} <div class="fb">
-                <div class="fb-comments" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}" data-numposts="5">
-            </div> {% endcomment %}
+                <div class="fb-comments" data-href="http://127.0.0.1:8000/blog/blogpost/{{post.post_id}}"
+                    data-numposts="5">
+                </div> {% endcomment %}
             </div>
         </div>
-        <div class="links">
-            <ul id="connect">
-                <p>Connect with us :</p>
-                <li class="connect-links"> <a href="#">GitHub</a> </li>
-                <li class="connect-links"> <a href="#">Linkeln</a> </li>
-                <li class="connect-links"> <a href="#">Twitter</a> </li>
-            </ul>
+
+        
+        <div class="container">
+            <h1>Comments</h1>
+            <hr>
+            <!-- add-a-comment template -->
+            <div>
+                <h3>Add a comment</h3>
+                
+            </div>
+
+            <!-- display-comment template -->
+            <div class="comment">
+                <div class="commentimg"><img src="/static/blogpost/img/user.png" alt="user img"></div>
+                <div>
+                    <div class="commentdetails">
+                        Comment Here
+                    </div>
+                    <div class="actualcomment">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora, magnam voluptatem itaque
+                        molestiae nesciunt sunt quae nobis vero. Dolore similique minima recusandae. Facilis explicabo
+                        deserunt, quasi consequuntur iure praesentium ullam dolore minus illum, ratione suscipit nisi
+                        numquam porro fugiat. Nam sapiente et vel quo, ab similique natus delectus laboriosam
+                        voluptatum?
+                    </div>
+                </div>
+            </div> 
         </div>
     </div>
 </body>
