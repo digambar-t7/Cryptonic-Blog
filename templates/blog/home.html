@@ -77,7 +77,7 @@ Explore best Crypto content
         <div class="items">
             <div class="text">
                 <p>{{post.author}}</p>
-                <h4>{{post.title}}</h4>
+                <h4>{{post.title|truncatechars:31}}</h4>
                 <p>{{post.timestamp}}</p>
                 <p class="content">{{post.desc1|truncatechars:70}}</p>
                 <a href="/blog/{{post.slug}}">continue reading...</a>

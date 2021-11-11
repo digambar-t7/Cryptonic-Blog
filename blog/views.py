@@ -10,12 +10,15 @@ def bloghome(request):
     blogs = {
         'posts': posts,
     }
+    print(posts)
     return render(request, 'blog/home.html', blogs)
 
 
 def blogpost(request, slug):
-    # to return first obj of query set which required unique blog obj
+    # returns required blog as per the slug
     post = BlogPost.objects.get(slug=slug)
+    post.views = post.views + 1
+    post.save()
     # to return all root(non-reply) cmnts associated with this blogpost
     cmnts = BlogComment.objects.filter(post=post,parent=None)
     # to return all replies i.e. cmnts with some valid parent field

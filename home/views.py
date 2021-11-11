@@ -8,7 +8,22 @@ from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
 def home(request):
-    return render(request,'home/home.html')
+    posts = BlogPost.objects.values('views')
+
+    viewlist = [item['views'] for item in posts]
+    viewlist.sort()
+    viewlist.reverse()
+
+    finalist = []
+    for i in range(0,2):
+        post = BlogPost.objects.get(views=viewlist[i])
+        finalist.append(post)
+
+    populars = {
+        'posts' : finalist
+    }
+    
+    return render(request,'home/home.html',populars)
 
 def contact(request):
     if request.method=='POST':

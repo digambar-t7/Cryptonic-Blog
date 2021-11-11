@@ -16,6 +16,7 @@ class BlogPost(models.Model):
     desc3 = models.CharField(max_length=5000)
     thumbnail = models.ImageField(upload_to='blog/images',default='')
     slug = models.CharField(max_length=100)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
