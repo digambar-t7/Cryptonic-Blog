@@ -21,11 +21,19 @@ class BlogPost(models.Model):
         return self.title
 
 class BlogComment(models.Model):
-    comment_id = models.AutoField(primary_key=True)
+    # User generated fields
+    # actual comment text
     comment = models.TextField()
+    # user points to User obj from Model
     user = models.ForeignKey(User,on_delete=models.CASCADE)
+    # post points to BlogPost obj from Model i.e. post = new BlogPost obj/instance
     post = models.ForeignKey(BlogPost,on_delete=models.CASCADE)
+    # parent itself is a BlogComment obj
+    parent = models.ForeignKey('self',on_delete=models.CASCADE,null=True)
+
+    # Automatically generated fields
+    comment_id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField(default=now)
 
     def __str__(self):
-        return self.user.username +' - '+self.comment[0:20]
+        return self.user.username +' - '+self.comment

@@ -49,29 +49,30 @@
         width: max-content;
     }
 
-    .fb {
+    /* .fb {
         display: flex;
         justify-content: center;
         align-items: center;
         border: 2px solid white;
         border-radius: 3rem;
-    }
+    } */
 
-    #liker {
+    /* #liker {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-    }
+    } */
 
-    .comment {
+    .cmnt {
         background-color: #f6f6f6;
+        border: 1px solid gainsboro;
         display: flex;
-        justify-content: center;
         border-radius: 4px;
         margin: 15px 0;
+        padding: 10px;
     }
 
-    .comment img {
+    .cmnt img {
         border-radius: 34px;
         width: 117px;
     }
@@ -80,15 +81,32 @@
         padding-top: 10px;
         height: 86px;
     }
-    .actualcomment{
-        padding-bottom:19px ;
+
+    .actualcomment {
+        padding-bottom: 19px;
+    }
+
+    #comment {
+        width: 100%;
+        height: 135px;
+        border-radius: 0.5rem;
+        padding: 10px;
+    }
+
+    #notloggedin {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 1 rem;
     }
 </style>
 {% endblock style %}
 
 {% block body %}
+{% load humanize %}
+{% load extras %}
 
 <body>
+
     <div id="section">
         <div class="content">
             <h1>{{post.title}}</h1>
@@ -112,33 +130,108 @@
             </div>
         </div>
 
-        
         <div class="container">
             <h1>Comments</h1>
             <hr>
+            {% if user.is_authenticated %}
             <!-- add-a-comment template -->
             <div>
                 <h3>Add a comment</h3>
-                
+                <form action="/blog/postcomment/" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="comment" class="form-label"></label>
+                        <textarea name="comment" id="comment"
+                            placeholder="add your comment here for others to see..."></textarea>
+                    </div>
+                    <input type="hidden" name="parent" value="">
+                    <input type="hidden" name="post" value={{post.post_id}}>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                        <hr>
+                    </div>
+                </form>
             </div>
+            {% else %}
+            <div id="notloggedin">
+                <h3>Please login to comment</h3>
+                <!-- Login button -->
+                <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    Login Here
+                </button>
+            </div>
+            {% endif %}
 
+
+            {% if thank %}
+            <div style="text-align: center;">
+                <hr>
+                <h3 style="text-decoration: underline;">Be the first one to comment</h3>
+                <p>Since there are no comments</p>
+            </div>
+            {% else %}
+            <h3>Comments ({{total}})</h3>
+            <hr>
             <!-- display-comment template -->
-            <div class="comment">
+            {% for cmnt in cmnts %}
+            <div class="cmnt">
                 <div class="commentimg"><img src="/static/blogpost/img/user.png" alt="user img"></div>
-                <div>
+                <div style="width: 100%;">
                     <div class="commentdetails">
-                        Comment Here
+                        {{cmnt.user.first_name}} {{cmnt.user.last_name}} <br> {{cmnt.timestamp|naturaltime}}
+                        <hr>
                     </div>
                     <div class="actualcomment">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora, magnam voluptatem itaque
-                        molestiae nesciunt sunt quae nobis vero. Dolore similique minima recusandae. Facilis explicabo
-                        deserunt, quasi consequuntur iure praesentium ullam dolore minus illum, ratione suscipit nisi
-                        numquam porro fugiat. Nam sapiente et vel quo, ab similique natus delectus laboriosam
-                        voluptatum?
+                        {{cmnt.comment}}
                     </div>
+
+                    <!-- Post a Reply -->
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#reply-{{cmnt.comment_id}}" aria-expanded="false"
+                        aria-controls="reply-{{cmnt.comment_id}}">
+                        Reply
+                    </button>
+                    <div class="collapse" id="reply-{{cmnt.comment_id}}">
+
+                        <form action="/blog/postcomment/" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="comment" class="form-label"></label>
+                                <textarea name="comment" id="comment"
+                                    placeholder="reply this comment for others to see..."></textarea>
+                            </div>
+                            <input type="hidden" name="parent" value="{{cmnt.comment_id}}">
+                            <input type="hidden" name="post" value={{post.post_id}}>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Post Reply</button>
+                                <hr>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <!--Displaying Replies -->
+                    {% for reply in replydict|get_val:cmnt.comment_id %}
+                    <!-- replydict|get_val:cmnt.comment_id returns a list of all replies -->
+                    <div class="cmnt">
+                        <div class="commentimg"><img src="/static/blogpost/img/user.png" alt="repliers-img"></div>
+                        <div style="width: 100%;">
+                            <div class="commentdetails">
+                                {{reply.user.first_name}} {{reply.user.last_name}} <br> {{reply.timestamp|naturaltime}}
+                                <hr>
+                            </div>
+                            <div class="actualcomment">
+                                {{reply.comment}}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div> 
+            </div>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
+
 </body>
 {% endblock body %}
