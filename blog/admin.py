@@ -7,4 +7,4 @@ admin.site.register(BlogComment)
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
     class Media:
-        js = ('tinyinjext.js')
+        js = ('tinyinject.js',)
